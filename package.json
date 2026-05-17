@@ -1,0 +1,21 @@
+{
+  "name": "golden-boot-vault",
+  "version": "1.0.0",
+  "description": "金靴球王 - FLAP Vault Contract",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js --network bscMainnet",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network bscMainnet"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.0.2"
+  }
+}

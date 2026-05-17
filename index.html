@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>金靴球王 2026 | 打造全球最硬核的世界杯通缩引擎 </title>
+  <link rel="icon" type="image/webp" href="./素材/favicon.ico.webp" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+  <div class="bg-ambient" aria-hidden="true">
+    <span class="bg-orb orb-blue"></span>
+    <span class="bg-orb orb-gold"></span>
+    <span class="bg-orb orb-violet"></span>
+  </div>
+  <div id="toastContainer" class="toast-container"></div>
+  
+  <div class="app-container">
+    <!-- 顶部导航栏 -->
+    <header class="navbar">
+      <div class="nav-content">
+        <div class="brand">
+          <img src="./素材/logo.webp" alt="Logo" class="nav-logo" />
+          <div class="brand-text">
+            <span class="brand-name">金靴球王</span>
+            <span class="brand-year gold-text">2026</span>
+          </div>
+        </div>
+        
+        <nav class="nav-links">
+          <a href="#home">首页</a>
+          <button id="openHistoryModalBtn" class="nav-link-btn" type="button">历史开奖</button>
+          <button id="openProposalModalBtn" class="nav-link-btn" type="button">金靴提案</button>
+          <button id="openRulesModalBtn" class="nav-link-btn" type="button">玩法规则</button>
+        </nav>
+        
+        <div class="nav-actions">
+          <div class="status-group hidden" aria-hidden="true">
+            <span id="networkPill" class="pill info">BSC Testnet</span>
+            <span id="walletInfo" class="pill warning">未连接</span>
+            <span id="contractPill" class="pill muted">合约未检查</span>
+          </div>
+          <div class="wallet-panel">
+            <button id="connectBtn" class="gradient-btn">连接钱包</button>
+            <div id="walletEnvHint" class="wallet-env-hint hidden" aria-live="polite"></div>
+            <div id="walletMenuWrap" class="wallet-menu-wrap hidden">
+              <button id="walletMenuBtn" class="wallet-chip" type="button">
+                <span class="wallet-chip-balance" id="walletChipBalance">--</span>
+                <span class="wallet-chip-address" id="walletChipAddress">0x----</span>
+              </button>
+              <div id="walletDropdown" class="wallet-dropdown hidden">
+                <button id="copyAddressBtn" type="button">复制地址</button>
+                <button id="openExplorerBtn" type="button">区块链浏览器</button>
+                <button id="disconnectBtn" type="button" class="danger">断开连接</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="result-ticker" aria-label="最新开奖结果">
+      <div class="result-ticker-inner">
+        <span class="result-ticker-label">最新播报</span>
+        <div class="result-ticker-marquee">
+          <div id="resultTickerTrack" class="result-ticker-track">
+            <span id="resultTickerText" class="result-ticker-text">欢迎来到金靴球王</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="main-content">
+      <!-- 英雄展示区 -->
+      <section id="home" class="hero-section">
+        <div class="hero-left">
+          <div class="hero-visual-shell hero-video-shell">
+            <div class="hero-video-frame">
+              <video
+                class="hero-media"
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                poster="./素材/视频/视频封面.webp"
+              >
+                <source src="./素材/视频/宣传视频.mp4" type="video/mp4" />
+              </video>
+              <button class="hero-play-btn" type="button" aria-label="播放宣传视频">
+                <span class="hero-play-icon"></span>
+              </button>
+              <div class="hero-video-meta">
+                <span class="hero-video-dot"></span>
+                <span class="hero-video-title">GOLDEN BOOT ARENA</span>
+                <span class="hero-video-sep">·</span>
+                <span class="hero-video-live">LIVE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <span class="hero-eyebrow">Golden Boot King 2026 · Vault Protocol</span>
+          <h1 class="hero-title">
+            <span class="hero-title-line hero-title-metal">横扫世界杯，</span>
+            <span class="hero-title-line hero-title-gold">加冕金靴球王</span>
+          </h1>
+          <p class="hero-subtitle">
+            <span class="hero-subtitle-line">“金靴球王”首创“12人制博弈；</span>
+            <span class="hero-subtitle-line">“球员竞猜”交互式体育生态协议。</span>
+          </p>
+          <div class="hero-btns">
+            <button onclick="document.getElementById('training').scrollIntoView({behavior:'smooth'})" class="hero-primary"><span class="hero-btn-icon hero-btn-icon-ball" aria-hidden="true"></span><span class="hero-btn-text">进入训练场</span></button>
+            <button onclick="document.getElementById('glory').scrollIntoView({behavior:'smooth'})" class="hero-secondary"><span class="hero-btn-icon hero-btn-icon-cup" aria-hidden="true"></span><span class="hero-btn-text">查看荣耀池</span></button>
+          </div>
+          <div class="hero-points">
+            <span class="hero-point"><span class="hero-point-icon">⚽</span><span class="hero-point-text">12选3开奖</span></span>
+            <span class="hero-point"><span class="hero-point-icon">⟳</span><span class="hero-point-text">荣耀池回购</span></span>
+            <span class="hero-point"><span class="hero-point-icon">🛡</span><span class="hero-point-text">链上透明结算</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 数据大屏区 -->
+      <section id="stats" class="stats-grid">
+        <article class="stat-card stat-card-pool">
+          <div class="stat-icon pool-icon"></div>
+          <div class="stat-content">
+            <span class="stat-label">训练场奖池</span>
+            <div class="stat-line"><strong id="trainingPool" class="stat-value">-</strong><span class="stat-unit">BNB</span></div>
+            <span id="trainingPoolUsd" class="stat-note">≈ 0 USD</span>
+          </div>
+        </article>
+        <article class="stat-card stat-card-glory">
+          <div class="stat-icon glory-icon"></div>
+          <div class="stat-content">
+            <span class="stat-label">荣耀池余额</span>
+            <div class="stat-line"><strong id="gloryPool" class="stat-value">-</strong><span class="stat-unit">BNB</span></div>
+            <span id="gloryPoolUsd" class="stat-note">≈ 0 USD</span>
+          </div>
+        </article>
+        <article class="stat-card stat-card-round">
+          <div class="stat-icon round-icon"></div>
+          <div class="stat-content">
+            <span class="stat-label">当前轮次</span>
+            <div class="stat-line"><span class="stat-prefix">第</span><strong id="curRound" class="stat-value">-</strong><span class="stat-unit">轮</span></div>
+            <span id="roundPhase" class="stat-note">进行中</span>
+          </div>
+        </article>
+        <article class="stat-card stat-card-clock">
+          <div class="stat-icon clock-icon"></div>
+          <div class="stat-content">
+            <span id="roundCountdownLabel" class="stat-label">下次开奖倒计时</span>
+            <input id="roundCountdown" class="stat-input" value="等待读取..." readonly />
+            <span id="roundCountdownNote" class="stat-note">统一链上结算</span>
+          </div>
+        </article>
+      </section>
+
+      <!-- 核心玩法区 -->
+      <div class="section-header hidden" aria-hidden="true">
+        <span class="gold-bar"></span>
+        <h2>核心玩法</h2>
+      </div>
+      <section class="features-grid hidden" aria-hidden="true">
+        <article class="feature-card feature-train">
+          <div class="feature-icon train">⚽</div>
+          <div class="feature-body">
+            <span class="feature-tag">训练玩法</span>
+            <h3>训练场 12选3</h3>
+            <p>从 12 支球队中选择 3 名，命中越高奖励越高，公开透明、按轮结算。</p>
+          </div>
+          <span class="feature-arrow">›</span>
+        </article>
+        <article class="feature-card feature-vote">
+          <div class="feature-icon vote">🏆</div>
+          <div class="feature-body">
+            <span class="feature-tag">荣耀治理</span>
+            <h3>金靴投票</h3>
+            <p>使用主币参与荣耀提案投票，决定生态关注目标与荣耀池后续方向。</p>
+          </div>
+          <span class="feature-arrow">›</span>
+        </article>
+        <article class="feature-card feature-buyback">
+          <div class="feature-icon buyback">💰</div>
+          <div class="feature-body">
+            <span class="feature-tag">价值循环</span>
+            <h3>荣耀回购</h3>
+            <p>提案通过后执行链上回购与销毁，持续强化荣耀池的长期价值支撑。</p>
+          </div>
+          <span class="feature-arrow">›</span>
+        </article>
+      </section>
+
+     
+      <section class="entries-grid">
+        <!-- 基础配置 -->
+        <div class="entry-card hidden" aria-hidden="true">
+          <div class="entry-head">
+            <div class="entry-title">
+              <i class="icon-config"></i>
+              <h4>基础配置</h4>
+            </div>
+          </div>
+          <div class="entry-body">
+            <div class="field-mini">
+              <label>代币地址</label>
+              <input id="tokenAddress" readonly />
+            </div>
+            <div class="field-mini">
+              <label>金库地址</label>
+              <input id="vaultAddress" />
+            </div>
+            <div class="field-mini">
+              <label>当前网络</label>
+              <input id="networkName" readonly />
+            </div>
+            <div class="field-mini">
+              <label>当前账户</label>
+              <input id="accountAddress" readonly />
+            </div>
+            <div class="field-mini">
+              <label>我的余额</label>
+              <input id="tokenBalance" readonly />
+            </div>
+          </div>
+          <div class="entry-foot">
+            <button id="loadBtn" class="action-link">读取数据</button>
+          </div>
+        </div>
+
+        <!-- 统一轮次看板 -->
+        <div class="entry-card highlight hidden" aria-hidden="true">
+          <div class="entry-head">
+            <div class="entry-title">
+              <i class="icon-board"></i>
+              <h4>轮次看板</h4>
+            </div>
+            <span id="enterStatusBadge" class="status-tag">等待读取</span>
+          </div>
+          <div class="entry-body">
+            <div class="field-mini">
+              <label>报名截止</label>
+              <input id="entryCloseAtText" readonly />
+            </div>
+            <div class="field-mini">
+              <label>轮次结束</label>
+              <input id="roundEndAtText" readonly />
+            </div>
+            <div class="field-mini">
+              <label>当前提示</label>
+              <input id="roundTips" readonly />
+            </div>
+            <div class="field-mini">
+              <label>金库描述</label>
+              <textarea id="vaultDescription" rows="2" readonly></textarea>
+            </div>
+          </div>
+          <div class="entry-foot">
+            <button id="drawBtn" class="action-link">触发开奖</button>
+          </div>
+        </div>
+
+        <!-- 训练场交互 -->
+        <div id="training" class="entry-card entry-card-training">
+          <div class="entry-head">
+            <div class="entry-title">
+              <i class="icon-soccer"></i>
+              <h4>训练场参与</h4>
+            </div>
+            <button id="openTrainingRulesBtn" class="training-rules-trigger" type="button">训练场规则</button>
+          </div>
+          <div class="entry-body training-main-layout">
+            <div class="training-stage training-stage-left">
+              <div class="training-stage-head">
+                <strong>选择 3 名球员</strong>
+                <span>12 选 3 · 自动授权参与</span>
+              </div>
+              <div id="playerPicker" class="player-picker">
+                <button type="button" class="player-card" data-num="1"><img src="./素材/球员/1.webp" alt="球员1" /><span>1号</span></button>
+                <button type="button" class="player-card" data-num="2"><img src="./素材/球员/2.webp" alt="球员2" /><span>2号</span></button>
+                <button type="button" class="player-card" data-num="3"><img src="./素材/球员/3.webp" alt="球员3" /><span>3号</span></button>
+                <button type="button" class="player-card" data-num="4"><img src="./素材/球员/4.webp" alt="球员4" /><span>4号</span></button>
+                <button type="button" class="player-card" data-num="5"><img src="./素材/球员/5.webp" alt="球员5" /><span>5号</span></button>
+                <button type="button" class="player-card" data-num="6"><img src="./素材/球员/6.webp" alt="球员6" /><span>6号</span></button>
+                <button type="button" class="player-card" data-num="7"><img src="./素材/球员/7.webp" alt="球员7" /><span>7号</span></button>
+                <button type="button" class="player-card" data-num="8"><img src="./素材/球员/8.webp" alt="球员8" /><span>8号</span></button>
+                <button type="button" class="player-card" data-num="9"><img src="./素材/球员/9.webp" alt="球员9" /><span>9号</span></button>
+                <button type="button" class="player-card" data-num="10"><img src="./素材/球员/10.webp" alt="球员10" /><span>10号</span></button>
+                <button type="button" class="player-card" data-num="11"><img src="./素材/球员/11.webp" alt="球员11" /><span>11号</span></button>
+                <button type="button" class="player-card" data-num="12"><img src="./素材/球员/12.webp" alt="球员12" /><span>12号</span></button>
+              </div>
+              <div id="playerSelectionText" class="player-selection-text">暂未选择球员</div>
+              <div id="currentRoundTicketBox" class="current-round-ticket hidden" aria-live="polite"></div>
+              <input id="n1" type="hidden" />
+              <input id="n2" type="hidden" />
+              <input id="n3" type="hidden" />
+            </div>
+            <div class="training-side-panel">
+              <div class="training-action-card">
+                <div class="training-stage-head compact">
+                  <strong>参与训练</strong>
+                  <span>自动检查授权并提交</span>
+                </div>
+                <div class="training-eligibility-row">
+                  <span class="training-eligibility-label">持仓状态</span>
+                  <span id="trainingEligibilityBadge" class="status-tag training-eligibility-badge waiting">等待读取</span>
+                </div>
+                <div id="trainingEligibilityNote" class="training-eligibility-note">参与和领奖门槛 ≥ 500,000 代币</div>
+                <div id="trainingHint" class="player-selection-text training-hint">每个地址每轮只能参与 1 次</div>
+                <div class="btn-group training-action-buttons">
+                  <button id="approveTicketBtn" class="mini-btn hidden">授权门票</button>
+                  <button id="enterBtn" class="mini-btn primary" disabled>参与训练（50,000代币）</button>
+                </div>
+              </div>
+              <div class="training-summary-row compact training-summary-stack">
+                <div class="training-reward-card">
+                  <div class="training-reward-head">
+                    <label>历史累计奖励</label>
+                    <span class="training-reward-chip">Reward Summary</span>
+                  </div>
+                  <div id="unclaimedRewardTotal" class="training-reward-value">0 BNB</div>
+                  <div class="training-reward-meta">
+                    <span id="trainingRewardStatus" class="training-reward-status idle">尚未参与</span>
+                    <span id="trainingRewardCount" class="training-reward-count">参与训练后这里会汇总奖励</span>
+                  </div>
+                  <div class="training-reward-note">命中后可在这里刷新奖励并一键领取</div>
+                </div>
+                <div class="training-summary-actions training-summary-actions-stack">
+                  <button id="refreshRewardsBtn" class="mini-btn">刷新奖励</button>
+                  <button id="claimAllBtn" class="mini-btn primary" disabled title="当前没有可领取的历史累计奖励">一键领取</button>
+                </div>
+              </div>
+              <div class="training-records-panel compact">
+                <div class="training-records-head">
+                  <div>
+                    <strong>我的训练记录</strong>
+                    <div class="training-records-copy">查看历次参与、命中结果与待领奖状态</div>
+                  </div>
+                  <div class="training-records-actions">
+                    <button id="openTrainingRecordsBtn" class="mini-btn">打开记录</button>
+                  </div>
+                </div>
+                <button id="openTrainingRecordsBtnAlt" class="training-records-trigger hidden" type="button" aria-hidden="true">查看全部历史训练记录</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="trainingRecordsModal" class="training-modal hidden" aria-hidden="true">
+          <div id="trainingRecordsBackdrop" class="training-modal-backdrop"></div>
+          <div class="training-modal-dialog">
+            <div class="training-modal-head">
+              <div>
+                <strong>我的训练记录</strong>
+                <div class="training-modal-sub">查看你的历史参与、命中结果与待领奖状态</div>
+              </div>
+              <div class="training-modal-actions">
+                <button id="myRecordsBtn" class="mini-btn">刷新我的训练记录</button>
+                <button id="closeTrainingRecordsBtn" class="mini-btn" type="button">关闭</button>
+              </div>
+            </div>
+            <div class="training-modal-stats">
+              <div class="training-modal-stat"><span>参与轮次</span><strong id="trainingRecordsCount">0</strong></div>
+              <div class="training-modal-stat"><span>命中轮次</span><strong id="trainingRecordsWins">0</strong></div>
+              <div class="training-modal-stat"><span>待领奖励</span><strong id="trainingRecordsPending">0</strong></div>
+            </div>
+            <div id="myTrainingRecords" class="training-records-list empty"></div>
+          </div>
+        </div>
+
+        <!-- 荣耀池提案 -->
+        <div id="glory" class="entry-card hidden" aria-hidden="true">
+          <div class="entry-head">
+            <div class="entry-title">
+              <i class="icon-proposal"></i>
+              <h4>荣耀池提案</h4>
+            </div>
+          </div>
+          <div class="entry-body">
+            <div class="notice-box">查看提案详情、投票进度与我的锁仓状态。支持与反对已整合到提案卡内直接操作。</div>
+          </div>
+          <div class="entry-foot">
+            <button id="proposalListBtn" class="action-link">查看列表</button>
+          </div>
+        </div>
+
+        <!-- 荣耀池买回 -->
+        <div class="entry-card hidden" aria-hidden="true">
+          <div class="entry-head">
+            <div class="entry-title">
+              <i class="icon-buyback"></i>
+              <h4>荣耀买回</h4>
+            </div>
+          </div>
+          <div class="entry-body">
+            <div class="field-mini">
+              <label>激活目标</label>
+              <input id="buybackTargetEcho" readonly />
+            </div>
+            <div class="field-mini">
+              <label>滑点设置</label>
+              <input id="minOutputAmount" placeholder="最小输出" />
+            </div>
+            <div class="notice-box">
+              执行回购将使用荣耀池 0.1 BNB 买入目标币并销毁。
+            </div>
+          </div>
+          <div class="entry-foot">
+            <button id="buybackBtn" class="action-link gold">执行买回</button>
+          </div>
+        </div>
+
+        <!-- 日志中心 -->
+        <div class="entry-card hidden" aria-hidden="true">
+          <div class="entry-head">
+            <div class="entry-title">
+              <i class="icon-log"></i>
+              <h4>日志中心</h4>
+            </div>
+          </div>
+          <div class="entry-body">
+            <textarea id="logBox" rows="8" readonly placeholder="系统运行日志..."></textarea>
+          </div>
+          <div class="entry-foot">
+            <span class="status-dot">实时更新</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="proposal-launch-band">
+        <div class="proposal-launch-card">
+          <div>
+            <span class="proposal-launch-kicker">Owner / 管理员权限</span>
+            <h3>发起提案</h3>
+            <p>用于创建新的荣耀池治理提案，填写提案标题与目标子币后提交到链上。</p>
+          </div>
+          <button id="openProposalCreateModalBtn" class="mini-btn primary" type="button">发起提案</button>
+        </div>
+      </section>
+
+      <div id="trainingRulesModal" class="training-modal hidden" aria-hidden="true">
+        <div id="trainingRulesModalBackdrop" class="training-modal-backdrop"></div>
+        <div class="training-modal-dialog training-rules-modal-dialog">
+          <div class="training-modal-head">
+            <div>
+              <strong>训练场规则</strong>
+              <div class="training-modal-sub">用最直观的方式了解训练场参与、奖池结算和领奖注意事项</div>
+            </div>
+            <div class="training-modal-actions">
+              <button id="closeTrainingRulesBtn" class="mini-btn" type="button">关闭</button>
+            </div>
+          </div>
+          <div class="training-rules-shell compact">
+            <div class="training-rules-summary">
+              <span class="training-rules-kicker">Training Ground</span>
+              <h3>每轮选 3 名球员，上链后等待开奖，命中后领取属于你的奖池奖励。</h3>
+              <p>参与前需要满足训练场的持币门槛与当前轮参与门槛，报名和领奖都以链上校验结果为准。</p>
+            </div>
+            <div class="training-rules-steps">
+              <article class="training-rule-step">
+                <span class="training-rule-no">01</span>
+                <div><strong>先满足持币门槛与参与门槛</strong><p>报名时需满足训练场当前要求的持币条件；当前机制下，领奖时也会再次检查持币门槛，同时还要满足本轮参与门槛后才能顺利参与。</p></div>
+              </article>
+              <article class="training-rule-step">
+                <span class="training-rule-no">02</span>
+                <div><strong>从 12 名球员中选择 3 名并提交</strong><p>每个地址每轮只能参与 1 次。点击参与训练时，系统会自动检查门票授权，额度不足会先授权，再继续提交。</p></div>
+              </article>
+              <article class="training-rule-step">
+                <span class="training-rule-no">03</span>
+                <div><strong>封盘后等待开奖，结果以链上为准</strong><p>页面显示的倒计时、开奖结果、奖池状态都来自链上读取；一旦本轮已参与，不能重复提交第二次。</p></div>
+              </article>
+              <article class="training-rule-step">
+                <span class="training-rule-no">04</span>
+                <div><strong>命中后刷新奖励并一键领取</strong><p>超过领奖期限未领取的奖励，会按合约规则处理，建议及时领取。</p></div>
+              </article>
+            </div>
+            <div class="training-rules-note-strip">
+              <span>报名需满足持币门槛</span>
+              <span>领奖时再次检查持币门槛</span>
+              <span>每轮仅可参与一次</span>
+              <span>自动授权参与</span>
+              <span>奖励以上链为准</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="historyModal" class="training-modal history-modal hidden" aria-hidden="true">
+        <div id="historyModalBackdrop" class="training-modal-backdrop"></div>
+        <div class="training-modal-dialog history-modal-dialog">
+          <div class="training-modal-head history-modal-head">
+            <div>
+              <strong>历史开奖</strong>
+              <div class="training-modal-sub">查看每轮开奖号码、最高命中与中奖人数</div>
+            </div>
+            <div class="training-modal-actions">
+              <button id="closeHistoryModalBtn" class="mini-btn" type="button">关闭</button>
+            </div>
+          </div>
+          <div class="card-glass history-card-glass">
+            <div class="query-bar history-query-bar">
+              <button id="historyPrevRoundBtn" class="mini-btn" type="button">上一轮</button>
+              <input id="roundResultId" type="number" placeholder="输入轮次或点下面快捷轮次" />
+              <button id="roundResultBtn" class="mini-btn">查询开奖</button>
+              <button id="historyNextRoundBtn" class="mini-btn" type="button">下一轮</button>
+            </div>
+            <div id="historyQuickRounds" class="history-quick-rounds"></div>
+            <div id="roundResultBox" class="history-result-card empty"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="proposalCreateModal" class="training-modal history-modal hidden" aria-hidden="true">
+        <div id="proposalCreateModalBackdrop" class="training-modal-backdrop"></div>
+        <div class="training-modal-dialog proposal-create-modal-dialog">
+          <div class="training-modal-head history-modal-head">
+            <div>
+              <strong>发起提案</strong>
+              <div class="training-modal-sub">仅限 owner / 管理员发起，创建后进入荣耀池治理流程</div>
+            </div>
+            <div class="training-modal-actions">
+              <button id="closeProposalCreateModalBtn" class="mini-btn" type="button">关闭</button>
+            </div>
+          </div>
+          <div class="card-glass history-card-glass proposal-create-form">
+            <div class="field-mini">
+              <label>提案标题</label>
+              <input id="proposalTitle" placeholder="输入本次提案标题" />
+            </div>
+            <div class="field-mini">
+              <label>目标子币</label>
+              <input id="proposalTarget" placeholder="0x..." />
+            </div>
+            <div class="btn-group">
+              <button id="createProposalBtn" class="mini-btn primary">创建</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="proposalModal" class="training-modal history-modal hidden" aria-hidden="true">
+        <div id="proposalModalBackdrop" class="training-modal-backdrop"></div>
+        <div class="training-modal-dialog history-modal-dialog proposal-modal-dialog">
+          <div class="training-modal-head history-modal-head">
+            <div>
+              <strong>金靴提案</strong>
+              <div class="training-modal-sub">查看提案详情，并在卡片下直接质押投票</div>
+            </div>
+            <div class="training-modal-actions">
+              <button id="proposalListModalBtn" class="mini-btn">刷新提案记录</button>
+              <button id="closeProposalModalBtn" class="mini-btn" type="button">关闭</button>
+            </div>
+          </div>
+          
+          <div class="card-glass history-card-glass">
+            <div id="proposalListBox" class="proposal-list empty"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="rulesModal" class="training-modal rules-modal hidden" aria-hidden="true">
+        <div id="rulesModalBackdrop" class="training-modal-backdrop"></div>
+        <div class="training-modal-dialog rules-modal-dialog">
+          <div class="training-modal-head rules-modal-head">
+            <div>
+              <strong>玩法规则</strong>
+              <div class="training-modal-sub">完整了解税收沉淀、训练场博弈与荣耀池治理的链上运行方式</div>
+            </div>
+            <div class="training-modal-actions">
+              <button id="closeRulesModalBtn" class="mini-btn" type="button">关闭</button>
+            </div>
+          </div>
+          <div class="rules-modal-shell">
+            <aside class="rules-visual-panel">
+              <div class="rules-visual-media"></div>
+              <div class="rules-visual-content">
+                <span class="rules-hero-tag">Golden Boot King · Vault Rules</span>
+                <h3>税收入库，驱动两大核心玩法。</h3>
+                <p>所有结果以链上状态为准，训练场负责博弈与发奖，荣耀池负责治理与长期共识。</p>
+                <div class="rules-visual-points">
+                  <span>税收沉淀</span>
+                  <span>训练场</span>
+                  <span>荣耀池</span>
+                </div>
+              </div>
+            </aside>
+            <div class="rules-modal-body">
+              <div class="rules-grid compact">
+                <article class="rules-card">
+                  <span class="rules-card-kicker">税收分配</span>
+                  <h4>先进入金库，再按链上规则沉淀与分配。</h4>
+                  <p class="rules-copy">税收统一进入金库，持续沉淀训练场奖池、荣耀池与生态资金，页面展示只做链上读取，不做中心化记账。</p>
+                </article>
+                <article class="rules-card">
+                  <span class="rules-card-kicker">训练场</span>
+                  <h4>12 选 3，按轮结算。</h4>
+                  <p class="rules-copy">每个地址每轮参与一次，统一经历报名、封盘、开奖三个阶段，命中后按规则领取奖励。</p>
+                </article>
+                <article class="rules-card">
+                  <span class="rules-card-kicker">荣耀池</span>
+                  <h4>提案、投票、结算，形成长期治理共识。</h4>
+                  <p class="rules-copy">荣耀池负责生态方向治理与价值引导，提案结果和记录都以链上状态与前端查询结果为准。</p>
+                </article>
+                <div class="rules-note-strip">参与前连接钱包并读取数据；倒计时、奖池、开奖记录与奖励结果均以链上状态为准。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-copy-block">
+          <strong>免责声明</strong>
+          <p>本页面仅作为链上交互入口与信息展示界面，不构成任何投资建议。奖池、倒计时、开奖结果、提案记录与奖励领取结果均以链上状态为准，参与前请自行评估风险。</p>
+          <span class="footer-copy">&copy; 2026 金靴球王 (Golden Boot King). All Rights Reserved.</span>
+        </div>
+        <div class="footer-socials">
+          <a class="footer-social footer-social-x" href="https://x.com/0x_bnb_dev" target="_blank" rel="noreferrer" aria-label="Twitter / X">
+            <span class="footer-social-icon"></span>
+            <span>X / Twitter</span>
+          </a>
+          <a class="footer-social footer-social-telegram" href="https://t.me/bnbdev_community" target="_blank" rel="noreferrer" aria-label="Telegram">
+            <span class="footer-social-icon"></span>
+            <span>Telegram</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="./app.js"></script>
+  <script>
+    // 简单的选项卡切换逻辑，不影响 app.js 业务
+    function switchTab(id) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    function initHeroVideo() {
+      const frame = document.querySelector('.hero-video-frame');
+      const video = document.querySelector('.hero-media');
+      const btn = document.querySelector('.hero-play-btn');
+      if (!frame || !video || !btn) return;
+
+      const sync = () => frame.classList.toggle('is-playing', !video.paused);
+      const toggle = async () => {
+        try {
+          if (video.paused) await video.play();
+          else video.pause();
+          sync();
+        } catch {}
+      };
+
+      btn.addEventListener('click', toggle);
+      video.addEventListener('click', toggle);
+      video.addEventListener('play', sync);
+      video.addEventListener('pause', sync);
+      sync();
+    }
+
+    document.addEventListener('DOMContentLoaded', initHeroVideo);
+  </script>
+</body>
+</html>
