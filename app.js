@@ -5,8 +5,8 @@ const CONFIG = {
   RPC_WS_URL: "wss://rpc.ankr.com/bsc/ws/a26683b94cba4a37f4d0740f37de396a3101a8a28396797705098a47c60a5587",
   EXPLORER_URL: "https://bscscan.com",
   CURRENCY_SYMBOL: "BNB",
-  TOKEN_ADDRESS: "0xcf4f868e0813645ae6b1468a2da21e511bd47777",
-  VAULT_ADDRESS: "0x806b0209509F8547a6fEDC9797477246cbdeEF7b", // 当前已部署 GoldenBootVault 地址
+  TOKEN_ADDRESS: "",
+  VAULT_ADDRESS: "", // 当前已部署 GoldenBootVault 地址
 };
 
 const ERC20_ABI = [
